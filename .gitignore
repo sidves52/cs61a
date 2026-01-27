@@ -1,0 +1,4 @@
+**/*ok*
+**/tests/
+**/__pycache__/
+**/construct_check.py
