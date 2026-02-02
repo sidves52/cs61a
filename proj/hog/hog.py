@@ -79,7 +79,7 @@ def take_turn(num_rolls, player_score, opponent_score, dice=six_sided):
 
     if (num_rolls == 0):
         return boar_brawl(player_score, opponent_score)
-    
+
     return roll_dice(num_rolls, dice)
 
     # END PROBLEM 3
@@ -115,7 +115,7 @@ def num_factors(n):
     for i in range (1, (n // 2) + 1):
         if (n % i == 0):
             factors += 1
-    
+
     return factors + 1
 
     # END PROBLEM 4
@@ -130,7 +130,7 @@ def sus_points(score):
 
     if (not (factors == 3 or factors == 4)):
         return score
-    
+
     i = score + 1
     while True:
         if (is_prime(i)):
@@ -223,6 +223,9 @@ def always_roll(n):
 
     # BEGIN PROBLEM 6
     "*** YOUR CODE HERE ***"
+
+    return lambda x, y: n
+
     # END PROBLEM 6
 
 
@@ -255,10 +258,20 @@ def is_always_roll(strategy, goal=GOAL):
     """
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
+
+    rolls = strategy(0, 0)
+
+    for score in range(goal):
+        for opponent_score in range(goal):
+            if (strategy(score, opponent_score) != rolls):
+                return False
+
+    return True
+
     # END PROBLEM 7
 
 
-def make_averaged(original_function, times_called=1000):
+def make_averaged(original_function, times_called=5000):
     """Return a function that returns the average value of ORIGINAL_FUNCTION
     called TIMES_CALLED times.
 
@@ -272,6 +285,15 @@ def make_averaged(original_function, times_called=1000):
 
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+
+    def wrapped(*args):
+        sum = 0
+        for i in range(times_called):
+            sum += original_function(*args)
+        return sum / times_called
+
+    return wrapped
+
     # END PROBLEM 8
 
 
@@ -285,6 +307,19 @@ def max_scoring_num_rolls(dice=six_sided, times_called=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+
+    best_num_rolls = 0
+    best_avg_score = 0
+    avg_roll_function = make_averaged(roll_dice, times_called)
+
+    for i in range(1, 11):
+        avg_score = avg_roll_function(i, dice)
+        if (avg_score > best_avg_score):
+            best_num_rolls = i
+            best_avg_score = avg_score
+
+    return best_num_rolls
+
     # END PROBLEM 9
 
 
@@ -312,10 +347,10 @@ def run_experiments():
     six_sided_max = max_scoring_num_rolls(six_sided)
     print("Max scoring num rolls for six-sided dice:", six_sided_max)
 
-    print("always_roll(6) win rate:", average_win_rate(always_roll(6)))  # near 0.5
-    print("catch_up win rate:", average_win_rate(catch_up))
-    print("always_roll(3) win rate:", average_win_rate(always_roll(3)))
-    print("always_roll(8) win rate:", average_win_rate(always_roll(8)))
+    # print("always_roll(6) win rate:", average_win_rate(always_roll(6)))  # near 0.5
+    # print("catch_up win rate:", average_win_rate(catch_up))
+    # print("always_roll(3) win rate:", average_win_rate(always_roll(3)))
+    # print("always_roll(8) win rate:", average_win_rate(always_roll(8)))
 
     print("boar_strategy win rate:", average_win_rate(boar_strategy))
     print("sus_strategy win rate:", average_win_rate(sus_strategy))
@@ -330,7 +365,11 @@ def boar_strategy(score, opponent_score, threshold=11, num_rolls=6):
     points, and returns NUM_ROLLS otherwise. Ignore the Sus Fuss rule.
     """
     # BEGIN PROBLEM 10
-    return num_rolls  # Remove this line once implemented.
+
+    if (boar_brawl(score, opponent_score) >= threshold):
+        return 0
+    return num_rolls  # Remove this line once implemented
+
     # END PROBLEM 10
 
 
@@ -339,17 +378,24 @@ def sus_strategy(score, opponent_score, threshold=11, num_rolls=6):
     THRESHOLD points, and returns NUM_ROLLS otherwise. Consider both the Boar Brawl and
     Suss Fuss rules."""
     # BEGIN PROBLEM 11
+
+    if (sus_points(score + boar_brawl(score, opponent_score)) >= score + threshold):
+        return 0
     return num_rolls  # Remove this line once implemented.
+
     # END PROBLEM 11
 
 
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
-    *** YOUR DESCRIPTION HERE ***
+    *** rahh documentation ***
     """
     # BEGIN PROBLEM 12
-    return 6  # Remove this line once implemented.
+
+    num_rolls = catch_up(score, opponent_score) + 1
+    return sus_strategy(score, opponent_score, 11, num_rolls)
+
     # END PROBLEM 12
 
 
