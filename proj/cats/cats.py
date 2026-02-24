@@ -149,17 +149,7 @@ def memo_diff(diff_function):
         # BEGIN PROBLEM EC
         "*** YOUR CODE HERE ***"
 
-        args = (entered, source)
-
-        if (args in cache and (limit <= cache[args][1])):
-            return cache[args][0]
-
-        result = diff_function(entered, source, limit)
-        cache[args] = (result, limit)
-        return result
-
-        # if only lambdas were allowed...
-        return cache[args][0] if args in cache and limit <= cache[args][1] else (lambda result: (cache.update({args: (result, limit)}), result))(diff_function(entered, source, limit))[1]
+        return cache[(entered, source)][0] if (entered, source) in cache and limit <= cache[(entered, source)][1] else cache.__setitem__((entered, source), (result := diff_function(entered, source, limit), limit)) or result
 
         # END PROBLEM EC
 
