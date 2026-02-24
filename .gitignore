@@ -6,3 +6,6 @@
 # projects
 proj/hog/*
 !proj/hog/hog.py
+
+proj/cats/*
+!proj/cats/cats.py
