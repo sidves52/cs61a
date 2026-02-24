@@ -180,6 +180,16 @@ def count_dollars_upward(sum_needed):
     """
     "*** YOUR CODE HERE ***"
 
+    def helper(goal, bill_size):
+        if (goal == 0):
+            return 1
+        if (goal < 0 or bill_size is None or bill_size > goal):
+            return 0
+        
+        return helper(goal - bill_size, bill_size) + helper(goal, next_larger_dollar(bill_size))
+    
+    return helper(sum_needed, 1)
+
 
 def print_move(origin, destination):
     """Print instructions to move a disk."""
@@ -215,6 +225,19 @@ def move_stack(num, start, end):
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
 
+    if (num == 1):
+        print_move(start, end)
+        return
+
+    # 1, 2 -> 0 -> 0x00 -> 0x11 -> 3
+    # 1, 3 -> 1 -> 0x01 -> 0x10 -> 2
+    # 2, 3 -> 2 -> 0x10 -> 0x01 -> 1
+    last_pole = ((start + end) % 3) ^ 0b11
+
+    move_stack(num - 1, start, last_pole)
+    print_move(start, end)
+    move_stack(num - 1, last_pole, end)
+
 
 from operator import sub, mul
 
@@ -229,5 +252,6 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return (lambda f: (lambda n: f(f, n))) (
+        lambda self, x: 1 if x == 0 else x * self(self, x-1))
 
