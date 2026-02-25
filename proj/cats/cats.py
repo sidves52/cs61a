@@ -344,7 +344,7 @@ def fastest_words(words_and_times: dict) -> list[list[str]]:
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
 
-    return [[words[w] for w in w_idxs if next(fastest_pl for fastest_pl, time in sorted(    ((pl, times[pl][w]) for pl in pl_idxs), key=(lambda e: e[1]))) == pl_row] for pl_row in pl_idxs]
+    return [[words[w] for w in w_idxs if next(fastest_pl for fastest_pl, time in sorted(((pl, times[pl][w]) for pl in pl_idxs), key=(lambda e: e[1]))) == pl_row] for pl_row in pl_idxs]
 
     # END PROBLEM 10
 
