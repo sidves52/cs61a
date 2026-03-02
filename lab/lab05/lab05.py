@@ -28,6 +28,15 @@ def insert_items(s: list[int], before: int, after: int) -> list[int]:
     """
     "*** YOUR CODE HERE ***"
 
+    i = 0
+    while i < len(s):
+        if (s[i] == before):
+            s.insert(i+1, after)
+            i += 1
+        i += 1
+
+    return s
+
 
 def group_by(s: list[int], fn) -> dict[int, list[int]]:
     """Return a dictionary of lists that together contain the elements of s.
@@ -40,12 +49,12 @@ def group_by(s: list[int], fn) -> dict[int, list[int]]:
     {9: [-3, 3], 4: [-2, 2], 1: [-1, 1], 0: [0]}
     """
     grouped = {}
-    for ____ in ____:
-        key = ____
+    for val in s:
+        key = fn(val)
         if key in grouped:
-            ____
+            grouped[key].append(val)
         else:
-            grouped[key] = ____
+            grouped[key] = [val]
     return grouped
 
 
@@ -84,11 +93,16 @@ def sprout_leaves(t, leaves):
     """
     "*** YOUR CODE HERE ***"
 
+    if (is_leaf(t)):
+        return tree(label(t), [tree(leaf) for leaf in leaves])
+
+    return tree(label(t), [sprout_leaves(branch, leaves) for branch in branches(t)])
+
 
 from typing import Iterator  # "t: Iterator[int]" means t is an iterator that yields integers
 
 def count_occurrences(t: Iterator[int], n: int, x: int) -> int:
-    """Return the number of times that x is equal to one of the
+    """Return the number of times t/hat x is equal to one of the
     first n elements of iterator t.
 
     >>> s = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])
@@ -110,6 +124,8 @@ def count_occurrences(t: Iterator[int], n: int, x: int) -> int:
     """
     "*** YOUR CODE HERE ***"
 
+    return len([1 for i in range(n) if next(t) == x])
+
 
 def pathsum(t, n):
     """
@@ -121,6 +137,8 @@ def pathsum(t, n):
     """
     "*** YOUR CODE HERE ***"
 
+    return (is_leaf(t) and label(t) == n) or any(pathsum(branch, n - label(t)) for branch in branches(t))
+
 
 def sum_tree(t):
     """Add all elements in a tree.
@@ -130,6 +148,8 @@ def sum_tree(t):
     15
     """
     "*** YOUR CODE HERE ***"
+
+    return label(t) + sum(sum_tree(branch) for branch in branches(t))
 
 def balanced(t):
     """Checks if each branch has same sum of all elements and
@@ -146,6 +166,8 @@ def balanced(t):
     False
     """
     "*** YOUR CODE HERE ***"
+
+    return len(set(sum_tree(branch) for branch in branches(t))) <= 1 and all(balanced(branch) for branch in branches(t))
 
 
 
