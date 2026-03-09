@@ -9,3 +9,6 @@ proj/hog/*
 
 proj/cats/*
 !proj/cats/cats.py
+
+proj/ants/*
+!proj/ants/ants.py
