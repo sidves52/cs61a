@@ -3,6 +3,8 @@
 **/__pycache__/
 **/construct_check.py
 
+**/.DS_Store
+
 # projects
 proj/hog/*
 !proj/hog/hog.py
