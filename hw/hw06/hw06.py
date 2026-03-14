@@ -141,7 +141,7 @@ def store_digits(n: int):
     return l
 
 
-def deep_map_mut(func, s: Link) -> None:
+def deep_map_mut(func, s) -> None:
     """Mutates a deep link s by replacing each item found with the
     result of calling func on the item. Does NOT create new Links (so
     no use of Link's constructor).
@@ -170,11 +170,12 @@ def deep_map_mut(func, s: Link) -> None:
     """
     "*** YOUR CODE HERE ***"
 
-    while s.rest is not Link.empty:
-        s.first = func(s.first)
+    while s is not Link.empty:
+        if isinstance(s.first, Link):
+            deep_map_mut(func, s.first)
+        else:
+            s.first = func(s.first)
         s = s.rest
-
-    s.first = func(s.first)
 
 
 def prune_small(t, n):
