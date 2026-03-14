@@ -1,49 +1,6 @@
 from __future__ import annotations
 
-
-class Link:
-    """A linked list.
-
-    >>> s = Link(1)
-    >>> s.first
-    1
-    >>> s.rest is Link.empty
-    True
-    >>> s = Link(2, Link(3, Link(4)))
-    >>> s.first = 5
-    >>> s.rest.first = 6
-    >>> s.rest.rest = Link.empty
-    >>> s                                    # Displays the contents of repr(s)
-    Link(5, Link(6))
-    >>> s.rest = Link(7, Link(Link(8, Link(9))))
-    >>> s
-    Link(5, Link(7, Link(Link(8, Link(9)))))
-    >>> print(s)                             # Prints str(s)
-    (5 7 (8 9))
-    """
-    empty = ()
-
-    def __init__(self, first, rest=empty):
-        assert rest is Link.empty or isinstance(rest, Link)
-        self.first = first
-        self.rest = rest
-
-    def __repr__(self):
-        if self.rest is not Link.empty:
-            rest_repr = ', ' + repr(self.rest)
-        else:
-            rest_repr = ''
-        return 'Link(' + repr(self.first) + rest_repr + ')'
-
-    def __str__(self):
-        string = '('
-        while self.rest is not Link.empty:
-            string += str(self.first) + ' '
-            self = self.rest
-        return string + str(self.first) + ')'
-
-
-passphrase = 'REPLACE_THIS_WITH_PASSPHRASE'
+passphrase = 'gobears'
 
 def midsem_survey(p):
     """
@@ -96,12 +53,20 @@ class VendingMachine:
         """Set the product and its price, as well as other instance attributes."""
         "*** YOUR CODE HERE ***"
 
+        self.product = product
+        self.price = price
+        self.stock = 0
+        self.balance = 0
+
     def restock(self, n: int) -> str:
         """Add n to the stock and return a message about the updated stock level.
 
         E.g., Current candy stock: 3
         """
         "*** YOUR CODE HERE ***"
+
+        self.stock += n
+        return f'Current {self.product} stock: {self.stock}'
 
     def add_funds(self, n: int) -> str:
         """If the machine is out of stock, return a message informing the user to restock
@@ -114,6 +79,12 @@ class VendingMachine:
         E.g., Current balance: $4
         """
         "*** YOUR CODE HERE ***"
+
+        if self.stock == 0:
+            return f'Nothing left to vend. Please restock. Here is your ${n}.'
+
+        self.balance += n
+        return f'Current balance: ${self.balance}'
 
     def vend(self) -> str:
         """Dispense the product if there is sufficient stock and funds and
@@ -128,6 +99,17 @@ class VendingMachine:
         """
         "*** YOUR CODE HERE ***"
 
+        if self.stock == 0:
+            return 'Nothing left to vend. Please restock.'
+
+        change = self.balance - self.price
+
+        if change < 0:
+            return f'Please add ${-change} more funds.'
+
+        self.balance = 0
+        self.stock -= 1
+        return f'Here is your {self.product}{f" and ${change} change." if change > 0 else "."}'
 
 def store_digits(n: int):
     """Stores the digits of a positive number n in a linked list.
@@ -149,6 +131,14 @@ def store_digits(n: int):
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
     "*** YOUR CODE HERE ***"
+
+    l = Link.empty
+
+    while n:
+        l = Link(n % 10, l)
+        n //= 10
+
+    return l
 
 
 def deep_map_mut(func, s: Link) -> None:
@@ -180,6 +170,12 @@ def deep_map_mut(func, s: Link) -> None:
     """
     "*** YOUR CODE HERE ***"
 
+    while s.rest is not Link.empty:
+        s.first = func(s.first)
+        s = s.rest
+
+    s.first = func(s.first)
+
 
 def prune_small(t, n):
     """Prune the tree mutatively, keeping only the n branches
@@ -198,11 +194,11 @@ def prune_small(t, n):
     >>> t3
     Tree(6, [Tree(1), Tree(3, [Tree(1), Tree(2)])])
     """
-    while ____:
-        largest = max(____, key=____)
-        ____
+    while len(t.branches) > n:
+        largest = max(t.branches, key=lambda x: x.label)
+        t.branches.remove(largest)
     for b in t.branches:
-        ____
+        prune_small(b, n)
 
 
 def delete(t, x):
@@ -225,13 +221,13 @@ def delete(t, x):
     Tree(1, [Tree(4), Tree(5), Tree(3, [Tree(6)]), Tree(6), Tree(7), Tree(8), Tree(4)])
     """
     new_branches = []
-    for _________ in ________________:
-        _______________________
+    for b in t.branches:
+        delete(b, x)
         if b.label == x:
-            __________________________________
+            new_branches.extend(b.branches)
         else:
-            __________________________________
-    t.branches = ___________________
+            new_branches.append(b)
+    t.branches = new_branches
 
 
 def two_list(vals, counts):
@@ -253,6 +249,12 @@ def two_list(vals, counts):
     Link(1, Link(1, Link(3, Link(3, Link(2)))))
     """
     "*** YOUR CODE HERE ***"
+
+    l = Link.empty
+    for i in range(len(vals)-1, -1, -1):
+        for _ in range(counts[i]):
+            l = Link(vals[i], l)
+    return l
 
 
 class Tree:
