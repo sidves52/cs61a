@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from math import ceil, log
 
 class Link:
     """A linked list.
@@ -86,6 +86,10 @@ class Account:
         assert self.balance > 0 and amount > 0 and self.interest > 0
         "*** YOUR CODE HERE ***"
 
+        # A = P * (1 + I)^t
+        # t = ln(A/P) / ln(1 + I)
+        return ceil(log(amount / self.balance, 1 + self.interest))
+
 
 class FreeChecking(Account):
     """A bank account that charges for withdrawals, but the first two are free!
@@ -116,6 +120,16 @@ class FreeChecking(Account):
 
     "*** YOUR CODE HERE ***"
 
+    def __init__(self, account_holder: str):
+        super().__init__(account_holder)
+
+    def withdraw(self, amount: int) -> int | str:
+        if self.free_withdrawals > 0:
+            self.free_withdrawals -= 1
+            return super().withdraw(amount)
+        else:
+            return super().withdraw(amount + self.withdraw_fee)
+
 
 def without(s: Link, i: int) -> Link:
     """Return a new linked list like s but without the element at index i.
@@ -129,6 +143,12 @@ def without(s: Link, i: int) -> Link:
     Link(3, Link(5, Link(7, Link(9))))
     """
     "*** YOUR CODE HERE ***"
+
+    if i == 0:
+        return without(s.rest, -1)
+    if s.rest is Link.empty:
+        return Link(s.first)
+    return Link(s.first, without(s.rest, i - 1))
 
 
 def duplicate_link(s: Link, val: int) -> None:
@@ -149,3 +169,11 @@ def duplicate_link(s: Link, val: int) -> None:
     """
     "*** YOUR CODE HERE ***"
 
+    if s is Link.empty:
+        return
+
+    if s.first == val:
+        s.rest = Link(val, s.rest)
+        duplicate_link(s.rest.rest, val)
+    else:
+        duplicate_link(s.rest, val)
