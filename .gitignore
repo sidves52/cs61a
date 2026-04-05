@@ -14,3 +14,7 @@ proj/cats/*
 
 proj/ants/*
 !proj/ants/ants.py
+
+# scheme
+**/editor/*
+**/scheme
