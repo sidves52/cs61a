@@ -5,6 +5,11 @@
 
 **/.DS_Store
 
+# scheme
+**/editor/*
+hw/*/scheme
+lab/*/scheme
+
 # projects
 proj/hog/*
 !proj/hog/hog.py
@@ -15,6 +20,8 @@ proj/cats/*
 proj/ants/*
 !proj/ants/ants.py
 
-# scheme
-**/editor/*
-**/scheme
+proj/scheme/*
+!proj/scheme/scheme_eval_apply.py
+!proj/scheme/scheme_forms.py
+!proj/scheme/scheme_classes.py
+!proj/scheme/questions.scm
