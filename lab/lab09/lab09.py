@@ -13,21 +13,22 @@ def calc_eval(exp):
     >>> calc_eval(Link("+", Link(1, Link(2, nil))))
     3
     """
+    print("DEBUG:", exp, type(exp))
     if isinstance(exp, Link):
-        operator = ____________ # UPDATE THIS FOR Q2, e.g (+ 1 2), + is the operator
-        operands = ____________ # UPDATE THIS FOR Q2, e.g (+ 1 2), 1 and 2 are operands
+        operator = exp.first # UPDATE THIS FOR Q2, e.g (+ 1 2), + is the operator
+        operands = exp.rest # UPDATE THIS FOR Q2, e.g (+ 1 2), 1 and 2 are operands
         if operator == 'and': # and expressions
             return eval_and(operands)
         elif operator == 'define': # define expressions
             return eval_define(operands)
         else: # Call expressions
-            return calc_apply(___________, ___________) # UPDATE THIS FOR Q2, what is type(operator)?
+            return calc_apply(calc_eval(operator), map_link(calc_eval, operands)) # UPDATE THIS FOR Q2, what is type(operator)?
     elif exp in OPERATORS:   # Looking up procedures
         return OPERATORS[exp]
     elif isinstance(exp, int) or isinstance(exp, bool):   # Numbers and booleans
         return exp
-    elif _________________: # CHANGE THIS CONDITION FOR Q4, where are variables stored?
-        return _________________ # UPDATE THIS FOR Q4, how do you access a variable?
+    elif exp in bindings: # CHANGE THIS CONDITION FOR Q4, where are variables stored?
+        return bindings[exp] # UPDATE THIS FOR Q4, how do you access a variable?
 
 def calc_apply(op, args):
     return op(args)
@@ -53,6 +54,13 @@ def floor_div(args):
     """
     "*** YOUR CODE HERE ***"
 
+    curr = args.rest
+    acc = args.first
+    while curr is not Link.empty:
+        acc //= curr.first
+        curr = curr.rest
+    return acc
+
 scheme_t = True   # Scheme's #t
 scheme_f = False  # Scheme's #f
 
@@ -75,6 +83,19 @@ def eval_and(expressions):
     """
     "*** YOUR CODE HERE ***"
 
+    if expressions is Link.empty:
+        return scheme_t
+
+    last_eval = calc_eval(expressions.first)
+    curr = expressions.rest
+    while curr is not Link.empty:
+        if last_eval is scheme_f:
+            break
+        last_eval = calc_eval(curr.first)
+        curr = curr.rest
+
+    return last_eval
+
 bindings = {}
 
 def eval_define(expressions):
@@ -93,6 +114,11 @@ def eval_define(expressions):
     2
     """
     "*** YOUR CODE HERE ***"
+
+    symbol = expressions.first
+    value = calc_eval(expressions.rest.first) if len_link(expressions.rest) == 1 else calc_eval(expressions.rest)
+    bindings[symbol] = value
+    return symbol
 
 OPERATORS = { "//": floor_div, "+": addition, "-": subtraction, "*": multiplication, "/": division }
 
