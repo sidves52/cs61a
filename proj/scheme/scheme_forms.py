@@ -55,7 +55,8 @@ def do_define_form(expressions, env):
         args = signature.rest
         env.define(sig, do_lambda_form(Link(args, expressions.rest), env))
         return sig
-
+        #line = Link(signature.first, Link(Link("lambda", Link(signature.rest, expressions.rest))))
+        #return do_define_form(line, env)
         # END PROBLEM 10
     else:
         bad_signature = signature.first if isinstance(signature, Link) else signature
