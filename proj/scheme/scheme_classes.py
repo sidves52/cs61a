@@ -61,6 +61,21 @@ class Frame:
             raise SchemeError('Incorrect number of arguments to function call')
         # BEGIN PROBLEM 8
         "*** YOUR CODE HERE ***"
+
+        child = Frame(self)
+
+        if formals is not nil:
+            child.bindings[formals.first] = vals.first
+
+            currK = formals.rest
+            currV = vals.rest
+            while currK is not nil:
+                child.bindings[currK.first] = currV.first
+                currK = currK.rest
+                currV = currV.rest
+
+        return child
+
         # END PROBLEM 8
 
 ##############

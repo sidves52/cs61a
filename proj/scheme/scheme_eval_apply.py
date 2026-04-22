@@ -74,6 +74,10 @@ def scheme_apply(procedure, args, env):
     elif isinstance(procedure, LambdaProcedure):
         # BEGIN PROBLEM 9
         "*** YOUR CODE HERE ***"
+
+        frame = procedure.env.make_child_frame(procedure.formals, args)
+        return eval_all(procedure.body, frame)
+
         # END PROBLEM 9
     elif isinstance(procedure, MuProcedure):
         # BEGIN PROBLEM 11
@@ -92,7 +96,20 @@ def eval_all(expressions, env):
     2
     """
     # BEGIN PROBLEM 6
-    return scheme_eval(expressions.first, env) # replace this with lines of your own code
+    # return scheme_eval(expressions.first, env) # replace this with lines of your own code
+
+    if expressions is nil:
+        return None
+    if expressions.rest is nil:
+        return scheme_eval(expressions.first, env)
+
+    scheme_eval(expressions.first, env)
+    curr = expressions.rest
+    while curr.rest is not nil:
+        scheme_eval(curr.first, env)
+        curr = curr.rest
+    return scheme_eval(curr.first, env)
+
     # END PROBLEM 6
 
 ###################################
