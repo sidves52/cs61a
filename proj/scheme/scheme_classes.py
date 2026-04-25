@@ -67,12 +67,12 @@ class Frame:
         if formals is not nil:
             child.bindings[formals.first] = vals.first
 
-            currK = formals.rest
-            currV = vals.rest
-            while currK is not nil:
-                child.bindings[currK.first] = currV.first
-                currK = currK.rest
-                currV = currV.rest
+            curr_k = formals.rest
+            curr_v = vals.rest
+            while curr_k is not nil:
+                child.bindings[curr_k.first] = curr_v.first
+                curr_k = curr_k.rest
+                curr_v = curr_v.rest
 
         return child
 

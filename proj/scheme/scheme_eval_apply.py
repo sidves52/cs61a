@@ -37,6 +37,12 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
         # BEGIN PROBLEM 3
         "*** YOUR CODE HERE ***"
 
+
+        if expr.first is True:
+            return True
+        elif expr.first is False:
+            return False
+
         procedure = scheme_eval(expr.first, env)
         args = map_link(lambda x: scheme_eval(x, env), expr.rest)
         return scheme_apply(procedure, args, env)
@@ -82,6 +88,10 @@ def scheme_apply(procedure, args, env):
     elif isinstance(procedure, MuProcedure):
         # BEGIN PROBLEM 11
         "*** YOUR CODE HERE ***"
+
+        frame = env.make_child_frame(procedure.formals, args)
+        return eval_all(procedure.body, frame)
+
         # END PROBLEM 11
     else:
         assert False, "Unexpected procedure: {}".format(procedure)
