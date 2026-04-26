@@ -234,6 +234,21 @@ def make_let_frame(bindings, env):
     names = vals = nil
     # BEGIN OPTIONAL PROBLEM 2
     "*** YOUR CODE HERE ***"
+
+    if bindings is not nil:
+        validate_form(bindings.first, 2, 2)
+        names = Link(bindings.first.first, names)
+        vals = Link(scheme_eval(bindings.first.rest.first, env), vals)
+
+        curr = bindings.rest
+        while curr is not nil:
+            validate_form(curr.first, 2, 2)
+            names = Link(curr.first.first, names)
+            vals = Link(scheme_eval(curr.first.rest.first, env), vals)
+            curr = curr.rest
+
+    validate_formals(names)
+
     # END OPTIONAL PROBLEM 2
     return env.make_child_frame(names, vals)
 
