@@ -10,6 +10,9 @@
 hw/*/scheme
 lab/*/scheme
 
+# sql
+**/sqlite_shell.py
+
 # projects
 proj/hog/*
 !proj/hog/hog.py
@@ -25,6 +28,3 @@ proj/scheme/*
 !proj/scheme/scheme_forms.py
 !proj/scheme/scheme_classes.py
 !proj/scheme/questions.scm
-
-# homework 10 (sql)
-hw/hw10/*.py
